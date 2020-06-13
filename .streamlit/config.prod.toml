@@ -52,7 +52,9 @@ fixMatplotlib = true
 # List of folders that should not be watched for changes. Relative paths will be taken as relative to the current working directory.
 # Example: ['/home/user1/env', 'relative/path/to/folder']
 # Default: []
-folderWatchBlacklist = []
+folderWatchBlacklist = ['']
+
+
 
 # If false, will attempt to open a browser window on start.
 # Default: false unless (1) we are on a Linux box where DISPLAY is unset, or (2) server.liveSave is set.
@@ -108,10 +110,6 @@ serverPort = 80
 # Leave unset if you want to use an AWS profile.
 # Default: (unset)
 #secretAccessKey =
-
-# Make the shared app visible only to users who have been granted view permission. If you are interested in this option, contact us at support@streamlit.io.
-# Default: false
-requireLoginToView = false
 
 # The "subdirectory" within the S3 bucket where to save apps.
 # S3 calls paths "keys" which is why the keyPrefix is like a subdirectory. Use "" to mean the root directory.

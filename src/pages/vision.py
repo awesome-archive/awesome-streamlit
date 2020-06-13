@@ -2,7 +2,8 @@
 import pathlib
 
 import streamlit as st
-import src.st_awesome
+
+import awesome_streamlit as ast
 
 
 @st.cache
@@ -20,7 +21,7 @@ def get_vision_markdown() -> str:
 
 def write():
     """Method used to write the page in the app.py file"""
-    src.st_awesome.title("Vision")
-    with st.spinner("Loading Vision ..."):
+    ast.shared.components.title_awesome("Vision")
+    with st.spinner("Loading  ..."):
         vision = get_vision_markdown()
-    st.markdown(vision)
+        st.markdown(vision)

@@ -55,11 +55,11 @@ class Image:
     registry: str = DOCKER_REGISTRY
 
     @property
-    def image(self):
+    def image(self) -> str:
         """The full name of the image, i.e. registry/name
 
         Returns:
-            [type] -- [description]
+            str -- [description]
         """
 
         return f"{self.registry}/{self.name}"
@@ -116,7 +116,7 @@ def build(c, image="prod", tag="latest", rebuild=False):
 
 @task
 def run(c, image="awesome-streamlit", tag="latest"):  # pylint: disable=unused-argument
-    """Run the Docker container interactively.
+    """Run the Docker container bash terminal interactively.
 
     Arguments:
         c {[type]} -- Invoke command object
@@ -158,7 +158,7 @@ def push(c, image="awesome-streamlit", tag="latest"):
 
 @task
 def run_server(c):  # pylint: disable=unused-argument
-    """Run the Docker image interactively.
+    """Run the Docker image with the Streamlit server.
 
     Arguments:
         c {[type]} -- Invoke command object
@@ -188,6 +188,39 @@ Running the '{image}:{tag}' Docker image
 
 
 @task
+def run_server_with_ping(c):  # pylint: disable=unused-argument
+    """Run the docker image with Streamlit server and
+    a ping to awesome-streamlit.org every 5 minutes
+    to keep it alive
+
+    Arguments:
+        c {[type]} -- Invoke command object
+
+    Keyword Arguments:
+        image {[type]} -- awesome-streamlit (default: {"prod"})
+        tag {str} -- Name of tag (default: {"latest"})
+    """
+
+    # Invoke cannot run interactive
+    image = "awesome-streamlit"
+    tag = "latest"
+    print(
+        f"""
+Running the '{image}:{tag}' Docker image
+========================================
+"""
+    )
+    command = (
+        'docker run -it -p 80:80 --entrypoint "/bin/bash" '
+        f"{DOCKER_REGISTRY}/{image}:{tag} "
+        "./scripts/run_awesome_streamlit_with_ping.sh"
+    )
+
+    print(command)
+    subprocess.run(command, check=True)
+
+
+@task
 def system_prune(c):
     """The docker system prune command will free up space
 
@@ -202,3 +235,11 @@ def system_prune(c):
 """
     )
     c.run("docker system prune", echo=True)
+
+
+@task
+def remove_unused(command):  # pylint: disable=unused-argument
+    """Removes all unused containers to free up space"""
+    print("RUN THESE")
+    print("docker rmi $(docker images -q)")
+    print("docker rm -v $(docker ps -qa)")
